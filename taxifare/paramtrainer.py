@@ -65,7 +65,7 @@ class ParamTrainer(Trainer):
             grid_search_models[model_name] = grid_search
 
 
-            joblib.dump(self.grid.best_estimator_, f"../saved_models/{model_name}model_{self.i}.joblib")
+            joblib.dump(self.grid.best_estimator_, f"../saved_models/{model_name}_model_{self.i}.joblib")
             self.i+=1
         return grid_search_models
 

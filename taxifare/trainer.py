@@ -12,7 +12,7 @@ class Trainer(MLFlowBase):
 
     def __init__(self):
         super().__init__(
-            "[UK] [London] [Yanka13] TaxiFare Livecode", "https://mlflow.lewagon.co/")
+            "[UK] [London] [Yanka13] TaxiFare Livecode v1", "https://mlflow.lewagon.co/")
 
     def save_model(self):
         #save the model
