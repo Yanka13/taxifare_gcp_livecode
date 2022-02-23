@@ -1,11 +1,11 @@
 from sklearn.ensemble import RandomForestRegressor
 import joblib
 
-from taxifare.data import get_data, clean_df, holdout
-from taxifare.mlflow import MLFlowBase
+from taxifare.data import clean_df, holdout, get_data_using_pandas
+from taxifare.mlflow_tracker import MLFlowBase
 from taxifare.pipeline import TaxiFarePipeline
-from taxifare.utils import compute_rmse
-from taxifare.mlflow import MLFlowBase
+from taxifare.utils import compute_rmse, upload_model_to_gcp
+from taxifare.mlflow_tracker import MLFlowBase
 
 class Trainer(MLFlowBase):
 
@@ -16,7 +16,7 @@ class Trainer(MLFlowBase):
 
     def save_model(self):
         #save the model
-        joblib.dump(self.pipe, "../saved_models/pipe_fitted.joblib")
+        joblib.dump(self.pipe, "model.joblib")
 
     def score_rmse(self):
 
@@ -26,15 +26,16 @@ class Trainer(MLFlowBase):
         return rmse
 
 
-    def train(self):
+    def train(self, line_count):
 
 
         #launch a run
+        print('Training start.... ')
         self.mlflow_create_run()
 
 
         #get the data
-        df = get_data()
+        df = get_data_using_pandas(line_count)
         df = clean_df(df)
         X_train, X_test, y_train, y_test = holdout(df)
         self.X_train, self.X_test, self.y_train, self.y_test = X_train, X_test, y_train, y_test
@@ -51,6 +52,8 @@ class Trainer(MLFlowBase):
         # log model and hyperparam
         self.mlflow_log_param("model_name", "RandomForestRegressor")
         self.mlflow_log_param("n_estimators", 100)
+        self.mlflow_log_param("line_count", line_count)
+        print(f"Training with {line_count} rows in our dataset")
 
 
         # create the pipeline
@@ -67,11 +70,23 @@ class Trainer(MLFlowBase):
 
         # log rmse on mlflow
         self.mlflow_log_param("rmse", self.rmse)
+        print(f"rmse on test set is {self.rmse}")
 
         #save the model
         self.save_model()
 
+        #save the model on our bucket
+        upload_model_to_gcp()
+
+
         return self.pipe
 
+
+# We call here everything we need to do a training
+if __name__ == "__main__":
+
+    trainer = Trainer()
+    trainer.train(100)
+    print("Good job google!")
 
 

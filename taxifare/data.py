@@ -1,9 +1,35 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from google.cloud import storage
 
-def get_data(line_count=100):
-    url = "s3://wagon-public-datasets/taxi-fare-train.csv"
-    df = pd.read_csv(url, nrows=line_count)
+def get_data_using_pandas(line_count):
+
+    # get data from aws s3
+    # url = "s3://wagon-public-datasets/taxi-fare-train.csv"
+    # load n lines from my csv
+    df = pd.read_csv("gs://taxifare-805-yannis/data/train.csv", nrows=line_count)
+    return df
+
+
+def get_data_using_blob(line_count):
+
+    # get data from my google storage bucket
+    BUCKET_NAME = "taxifare-805-yannis"
+    BUCKET_TRAIN_DATA_PATH = "data/train.csv"
+
+    data_file = "train.csv"
+
+    client = storage.Client()  # verifies $GOOGLE_APPLICATION_CREDENTIALS
+
+    bucket = client.bucket(BUCKET_NAME)
+
+    blob = bucket.blob(BUCKET_TRAIN_DATA_PATH)
+
+    blob.download_to_filename(data_file)
+
+    # load downloaded data to dataframe
+    df = pd.read_csv(data_file, nrows=line_count)
+
     return df
 
 
@@ -30,7 +56,7 @@ def holdout(df):
     return X_train, X_test, y_train, y_test
 
 if __name__ == "__main__":
-    df = get_data()
+    df = get_data_using_pandas()
     df = clean_df(df)
     X_train, X_test, y_train, y_test = holdout(df)
     print(X_train.shape)

@@ -53,3 +53,22 @@ pypi_test:
 
 pypi:
 	@twine upload dist/* -u $(PYPI_USERNAME)
+
+JOB_NAME=livecode_train
+BUCKET_NAME=taxifare-805-yannis
+BUCKET_TRAINING_FOLDER=trainings
+PACKAGE_NAME=taxifare
+FILENAME=trainer
+PYTHON_VERSION=3.7
+RUNTIME_VERSION=2.8
+REGION=europe-west2
+
+push_to_google_amigo:
+	@gcloud ai-platform jobs submit training ${JOB_NAME} \
+    --job-dir gs://${BUCKET_NAME}/${BUCKET_TRAINING_FOLDER}  \
+    --package-path ${PACKAGE_NAME} \
+    --module-name ${PACKAGE_NAME}.${FILENAME} \
+    --python-version=${PYTHON_VERSION} \
+    --runtime-version=${RUNTIME_VERSION} \
+    --region ${REGION} \
+    --stream-logs
