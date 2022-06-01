@@ -84,7 +84,7 @@ class Trainer(MLFlowBase):
 if __name__ == "__main__":
 
     trainer = Trainer()
-    trainer.train(20_000_000)
+    trainer.train(100)
     print("Good job google!")
 
 

@@ -3,6 +3,11 @@ import numpy as np
 import pandas as pd
 from google.cloud import storage
 
+from dotenv import load_dotenv
+import os
+# Load variables in .env
+load_dotenv()
+
 def minkowski_distance(df, p,
                        start_lat="pickup_latitude",
                        start_lon="pickup_longitude",
@@ -40,6 +45,8 @@ def upload_model_to_gcp():
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
     bucket_name = "taxifare-900-yannis"
+    BUCKET_NAME = os.environ['BUCKET_NAME']
+
     # The path to your file to upload
     source_file_name = "model.joblib"
     # The ID of your GCS object

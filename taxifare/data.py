@@ -1,6 +1,10 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from google.cloud import storage
+from dotenv import load_dotenv
+import os
+# Load variables in .env
+load_dotenv()
 
 def get_data_using_pandas(line_count):
 
@@ -12,7 +16,7 @@ def get_data_using_pandas(line_count):
 def get_data_using_blob(line_count):
 
     # get data from my google storage bucket
-    BUCKET_NAME = "taxifare-900-yannis"
+    BUCKET_NAME = os.environ['BUCKET_NAME']   #same as bucket_name = "taxifare-900-yannis"
     BUCKET_TRAIN_DATA_PATH = "data/train.csv"
 
     data_file = "train.csv"
