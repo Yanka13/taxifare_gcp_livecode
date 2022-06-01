@@ -20,7 +20,7 @@ class TaxiFarePipeline():
             ('distance', pipe_distance, cols),
         ]
 
-        features_encoder = ColumnTransformer(feateng_blocks)
+        features_encoder = ColumnTransformer(feateng_blocks, remainder="drop")
 
         pipeline = Pipeline(steps=[
             ('features', features_encoder),

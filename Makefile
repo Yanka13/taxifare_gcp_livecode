@@ -54,8 +54,8 @@ pypi_test:
 pypi:
 	@twine upload dist/* -u $(PYPI_USERNAME)
 
-JOB_NAME=livecode_train
-BUCKET_NAME=taxifare-805-yannis
+JOB_NAME=taxi_fare_training_pipeline_$(shell date +'%Y%m%d_%H%M%S')
+BUCKET_NAME=taxifare-900-yannis
 BUCKET_TRAINING_FOLDER=trainings
 PACKAGE_NAME=taxifare
 FILENAME=trainer

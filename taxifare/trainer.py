@@ -1,6 +1,5 @@
 from sklearn.ensemble import RandomForestRegressor
 import joblib
-
 from taxifare.data import clean_df, holdout, get_data_using_pandas
 from taxifare.mlflow_tracker import MLFlowBase
 from taxifare.pipeline import TaxiFarePipeline
@@ -12,7 +11,7 @@ class Trainer(MLFlowBase):
 
     def __init__(self):
         super().__init__(
-            "[UK] [London] [Yanka13] TaxiFare Livecode v1", "https://mlflow.lewagon.co/")
+            "[UK] [London] [Yanka13] TaxiFare Livecode #900 v1", "https://mlflow.lewagon.ai/")
 
     def save_model(self):
         #save the model
@@ -32,7 +31,6 @@ class Trainer(MLFlowBase):
         #launch a run
         print('Training start.... ')
         self.mlflow_create_run()
-
 
         #get the data
         df = get_data_using_pandas(line_count)
@@ -69,7 +67,7 @@ class Trainer(MLFlowBase):
         self.score_rmse()
 
         # log rmse on mlflow
-        self.mlflow_log_param("rmse", self.rmse)
+        self.mlflow_log_metric("rmse", self.rmse)
         print(f"rmse on test set is {self.rmse}")
 
         #save the model
@@ -86,7 +84,7 @@ class Trainer(MLFlowBase):
 if __name__ == "__main__":
 
     trainer = Trainer()
-    trainer.train(100)
+    trainer.train(20_000_000)
     print("Good job google!")
 
 

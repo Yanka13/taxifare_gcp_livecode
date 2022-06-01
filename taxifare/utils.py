@@ -39,7 +39,7 @@ def upload_model_to_gcp():
 
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
-    bucket_name = "taxifare-805-yannis"
+    bucket_name = "taxifare-900-yannis"
     # The path to your file to upload
     source_file_name = "model.joblib"
     # The ID of your GCS object

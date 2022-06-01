@@ -4,17 +4,15 @@ from google.cloud import storage
 
 def get_data_using_pandas(line_count):
 
-    # get data from aws s3
-    # url = "s3://wagon-public-datasets/taxi-fare-train.csv"
-    # load n lines from my csv
-    df = pd.read_csv("gs://taxifare-805-yannis/data/train.csv", nrows=line_count)
+    # load n lines from my csv on my bucket
+    df = pd.read_csv("gs://taxifare-900-yannis/data/train.csv", nrows=line_count)
     return df
 
 
 def get_data_using_blob(line_count):
 
     # get data from my google storage bucket
-    BUCKET_NAME = "taxifare-805-yannis"
+    BUCKET_NAME = "taxifare-900-yannis"
     BUCKET_TRAIN_DATA_PATH = "data/train.csv"
 
     data_file = "train.csv"
@@ -56,7 +54,8 @@ def holdout(df):
     return X_train, X_test, y_train, y_test
 
 if __name__ == "__main__":
-    df = get_data_using_pandas()
+    df = get_data_using_pandas(1000)
     df = clean_df(df)
     X_train, X_test, y_train, y_test = holdout(df)
-    print(X_train.shape)
+    print(X_train.dtypes)
+    print(X_train.columns)
